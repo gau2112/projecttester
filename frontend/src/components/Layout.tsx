@@ -4,13 +4,14 @@ import { BookOpen, User, Menu, X } from 'lucide-react';
 
 import { useState } from 'react';
 import { Button } from './Button';
+import { useAuth } from '../context/AuthContext';
 
 interface LayoutProps {
     children: ReactNode;
-    isAuthenticated?: boolean;
 }
 
-export function Layout({ children, isAuthenticated = false }: LayoutProps) {
+export function Layout({ children }: LayoutProps) {
+    const { isAuthenticated, logout, user } = useAuth();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const location = useLocation();
 
@@ -47,10 +48,15 @@ export function Layout({ children, isAuthenticated = false }: LayoutProps) {
 
                     <div className="hidden md:flex items-center space-x-4">
                         {isAuthenticated ? (
-                            <Button variant="ghost" size="sm" className="gap-2">
-                                <User className="h-4 w-4" />
-                                Profile
-                            </Button>
+                            <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-2 px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-full text-sm font-medium border border-indigo-100 italic">
+                                    <User className="h-4 w-4" />
+                                    {user?.name || 'Student'}
+                                </div>
+                                <Button variant="ghost" size="sm" onClick={logout}>
+                                    Logout
+                                </Button>
+                            </div>
                         ) : (
                             <>
                                 <Link to="/login">
@@ -86,16 +92,24 @@ export function Layout({ children, isAuthenticated = false }: LayoutProps) {
                         </Link>
                         <hr className="border-slate-100" />
                         <div className="flex flex-col space-y-2">
-                            <Link to="/login">
-                                <Button variant="outline" className="w-full justify-start">
-                                    Log in
+                            {isAuthenticated ? (
+                                <Button className="w-full justify-start" variant="outline" onClick={logout}>
+                                    Logout
                                 </Button>
-                            </Link>
-                            <Link to="/register">
-                                <Button className="w-full justify-start">
-                                    Get Started
-                                </Button>
-                            </Link>
+                            ) : (
+                                <>
+                                    <Link to="/login">
+                                        <Button variant="outline" className="w-full justify-start">
+                                            Log in
+                                        </Button>
+                                    </Link>
+                                    <Link to="/register">
+                                        <Button className="w-full justify-start">
+                                            Get Started
+                                        </Button>
+                                    </Link>
+                                </>
+                            )}
                         </div>
                     </div>
                 )}

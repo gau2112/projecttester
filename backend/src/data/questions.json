@@ -1,0 +1,132 @@
+[
+    {
+        "subject_id": "science",
+        "question": "What is the powerhouse of the cell?",
+        "options": [
+            "Nucleus",
+            "Mitochondria",
+            "Ribosome",
+            "Golgi Apparatus"
+        ],
+        "correct_answer": 1,
+        "explanation": "Mitochondria generate most of the cell's supply of adenosine triphosphate (ATP).",
+        "level": "easy"
+    },
+    {
+        "subject_id": "science",
+        "question": "Which gas is most abundant in the Earth's atmosphere?",
+        "options": [
+            "Oxygen",
+            "Carbon Dioxide",
+            "Nitrogen",
+            "Hydrogen"
+        ],
+        "correct_answer": 2,
+        "explanation": "Nitrogen makes up about 78% of the Earth's atmosphere.",
+        "level": "medium"
+    },
+    {
+        "subject_id": "math",
+        "question": "What is the square root of 144?",
+        "options": [
+            "10",
+            "11",
+            "12",
+            "13"
+        ],
+        "correct_answer": 2,
+        "explanation": "12 multiplied by 12 equals 144.",
+        "level": "easy"
+    },
+    {
+        "subject_id": "history",
+        "question": "Who was the first President of the United States?",
+        "options": [
+            "Thomas Jefferson",
+            "Abraham Lincoln",
+            "George Washington",
+            "John Adams"
+        ],
+        "correct_answer": 2,
+        "explanation": "George Washington served from 1789 to 1797.",
+        "level": "easy"
+    },
+    {
+        "subject_id": "computer",
+        "question": "What does SQL stand for?",
+        "options": [
+            "Structured Query Language",
+            "Simple Query Language",
+            "Sequential Query Link",
+            "Standard Query Level"
+        ],
+        "correct_answer": 0,
+        "explanation": "SQL is standard for managing and manipulating relational databases.",
+        "level": "medium"
+    },
+    {
+        "subject_id": "computer",
+        "question": "Which of these is NOT a programming language?",
+        "options": [
+            "Python",
+            "HTML",
+            "Java",
+            "C++"
+        ],
+        "correct_answer": 1,
+        "explanation": "HTML is a markup language, not a programming language.",
+        "level": "easy"
+    },
+    {
+        "subject_id": "geography",
+        "question": "Which is the smallest continent by land area?",
+        "options": [
+            "Europe",
+            "Antarctica",
+            "Australia",
+            "South America"
+        ],
+        "correct_answer": 2,
+        "explanation": "Australia is the smallest continent by size.",
+        "level": "medium"
+    },
+    {
+        "subject_id": "science",
+        "question": "What is the atomic number of Gold?",
+        "options": [
+            "47",
+            "79",
+            "AU",
+            "197"
+        ],
+        "correct_answer": 1,
+        "explanation": "Gold has 79 protons in its nucleus.",
+        "level": "hard"
+    },
+    {
+        "subject_id": "math",
+        "question": "Solve: 25 * 4 / (2 + 3)",
+        "options": [
+            "10",
+            "20",
+            "25",
+            "15"
+        ],
+        "correct_answer": 1,
+        "explanation": "25*4 = 100; 2+3 = 5; 100/5 = 20.",
+        "level": "medium"
+    },
+    {
+        "subject_id": "history",
+        "question": "In which year did the Titanic sink?",
+        "options": [
+            "1905",
+            "1912",
+            "1918",
+            "1923"
+        ],
+        "correct_answer": 1,
+        "explanation": "The Titanic sank on April 15, 1912, after hitting an iceberg.",
+        "level": "medium"
+    }
+]

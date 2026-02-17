@@ -70,6 +70,56 @@ export function Home() {
                     </div>
                 ))}
             </section>
+
+            {/* Backend Connection Test */}
+            <section className="bg-slate-50 rounded-3xl p-8 sm:p-12 border border-slate-200">
+                <div className="max-w-xl mx-auto text-center space-y-6">
+                    <h2 className="text-2xl font-bold text-slate-900">Test Backend Connection</h2>
+                    <p className="text-slate-600">
+                        Send a message to your Node.js server to verify the end-to-end connection.
+                    </p>
+
+                    <div className="flex gap-2">
+                        <input
+                            id="test-message"
+                            type="text"
+                            placeholder="Type a message..."
+                            className="flex-1 px-4 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            defaultValue="Hello from Frontend!"
+                        />
+                        <Button
+                            onClick={async () => {
+                                const msgInput = document.getElementById('test-message') as HTMLInputElement;
+                                const statusDiv = document.getElementById('connection-status');
+                                if (!msgInput || !statusDiv) return;
+
+                                try {
+                                    statusDiv.innerText = 'Connecting...';
+                                    statusDiv.className = 'text-sm font-medium text-indigo-600';
+
+                                    const response = await fetch('http://localhost:5000/api/test', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ message: msgInput.value })
+                                    });
+
+                                    const data = await response.json();
+                                    statusDiv.innerText = data.message;
+                                    statusDiv.className = 'text-sm font-medium text-green-600';
+                                } catch (err) {
+                                    statusDiv.innerText = 'Error: Make sure backend is running on port 5000';
+                                    statusDiv.className = 'text-sm font-medium text-red-600';
+                                }
+                            }}
+                        >
+                            Send Message
+                        </Button>
+                    </div>
+                    <div id="connection-status" className="h-6 text-sm font-medium text-slate-500 italic">
+                        No connection attempted yet
+                    </div>
+                </div>
+            </section>
         </div>
     );
 }
