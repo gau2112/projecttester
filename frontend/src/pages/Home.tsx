@@ -27,6 +27,11 @@ export function Home() {
                             Start Learning Now <ArrowRight className="ml-2 h-5 w-5" />
                         </Button>
                     </Link>
+                    <Link to="/quiz/demo">
+                        <Button variant="secondary" size="lg" className="rounded-full px-8">
+                            Try Demo Quiz
+                        </Button>
+                    </Link>
                     <Link to="/features">
                         <Button variant="outline" size="lg" className="rounded-full px-8">
                             Explore Features

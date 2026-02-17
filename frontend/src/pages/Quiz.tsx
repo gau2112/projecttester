@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { CheckCircle2, ChevronRight, XCircle, RefreshCcw, ArrowLeft } from 'lucide-react';
+import { CheckCircle2, ChevronRight, XCircle, RefreshCcw, ArrowLeft, Timer } from 'lucide-react';
 import { Button } from '../components/Button';
 import { Card, CardContent } from '../components/Card';
 import clsx from 'clsx';
@@ -39,20 +39,73 @@ const MOCK_QUESTIONS = [
     }
 ];
 
+const DEMO_QUESTIONS = [
+    {
+        id: 101,
+        question: "Which planet is known as the Red Planet?",
+        options: ["Venus", "Mars", "Jupiter", "Saturn"],
+        correctAnswer: 1
+    },
+    {
+        id: 102,
+        question: "What is 2 + 2 × 2?",
+        options: ["6", "8", "4", "2"],
+        correctAnswer: 0
+    },
+    {
+        id: 103,
+        question: "Who painted the Mona Lisa?",
+        options: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Michelangelo"],
+        correctAnswer: 2
+    }
+];
+
 export function Quiz() {
     const { subjectId } = useParams();
     const navigate = useNavigate();
+
+    // Use Demo questions if subjectId is 'demo', otherwise mock questions
+    const questions = subjectId === 'demo' ? DEMO_QUESTIONS : MOCK_QUESTIONS;
 
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedOption, setSelectedOption] = useState<number | null>(null);
     const [isAnswered, setIsAnswered] = useState(false);
     const [score, setScore] = useState(0);
     const [showResults, setShowResults] = useState(false);
+    const [timeLeft, setTimeLeft] = useState(15); // 15 seconds per question
 
     // Capitalize subject ID for display
     const subjectName = subjectId ? subjectId.charAt(0).toUpperCase() + subjectId.slice(1) : 'General';
 
-    const currentQuestion = MOCK_QUESTIONS[currentQuestionIndex];
+    const currentQuestion = questions[currentQuestionIndex];
+
+    // Timer Logic
+    useEffect(() => {
+        if (showResults || isAnswered) return;
+
+        const timer = setInterval(() => {
+            setTimeLeft((prev) => {
+                if (prev <= 1) {
+                    clearInterval(timer);
+                    handleTimeout();
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [currentQuestionIndex, isAnswered, showResults]);
+
+    // Reset timer when question changes
+    useEffect(() => {
+        setTimeLeft(15);
+    }, [currentQuestionIndex]);
+
+    const handleTimeout = () => {
+        setIsAnswered(true);
+        // Timeout counts as incorrect (selectedOption remains null or whatever was selected)
+    };
 
     const handleOptionSelect = (index: number) => {
         if (isAnswered) return;
@@ -69,7 +122,7 @@ export function Quiz() {
     };
 
     const handleNext = () => {
-        if (currentQuestionIndex < MOCK_QUESTIONS.length - 1) {
+        if (currentQuestionIndex < questions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
             setSelectedOption(null);
             setIsAnswered(false);
@@ -84,10 +137,11 @@ export function Quiz() {
         setIsAnswered(false);
         setScore(0);
         setShowResults(false);
+        setTimeLeft(15);
     };
 
     if (showResults) {
-        const percentage = Math.round((score / MOCK_QUESTIONS.length) * 100);
+        const percentage = Math.round((score / questions.length) * 100);
 
         return (
             <div className="max-w-2xl mx-auto space-y-8 animate-in fade-in zoom-in-95 duration-500">
@@ -96,7 +150,7 @@ export function Quiz() {
                         <CheckCircle2 className="h-12 w-12" />
                     </div>
                     <h1 className="text-3xl font-bold text-slate-900">Quiz Completed!</h1>
-                    <p className="text-slate-600">You scored {score} out of {MOCK_QUESTIONS.length}</p>
+                    <p className="text-slate-600">You scored {score} out of {questions.length}</p>
                 </div>
 
                 <Card className="overflow-hidden">
@@ -131,22 +185,25 @@ export function Quiz() {
                 </div>
             </div>
 
-            {/* Progress Bar */}
-            <div className="w-full bg-slate-200 rounded-full h-2.5 mb-6">
-                <div
-                    className="bg-indigo-600 h-2.5 rounded-full transition-all duration-500"
-                    style={{ width: `${((currentQuestionIndex + 1) / MOCK_QUESTIONS.length) * 100}%` }}
-                ></div>
+            {/* Progress & Timer */}
+            <div className="grid gap-4">
+                <div className="flex justify-between items-center text-sm font-medium text-slate-600">
+                    <span>Question {currentQuestionIndex + 1}/{questions.length}</span>
+                    <div className={clsx("flex items-center gap-2", timeLeft <= 5 ? "text-red-600 animate-pulse" : "text-indigo-600")}>
+                        <Timer className="h-4 w-4" />
+                        <span>00:{timeLeft.toString().padStart(2, '0')}</span>
+                    </div>
+                </div>
+                <div className="w-full bg-slate-200 rounded-full h-2.5">
+                    <div
+                        className="bg-indigo-600 h-2.5 rounded-full transition-all duration-500"
+                        style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
+                    ></div>
+                </div>
             </div>
 
             <Card>
                 <CardContent className="p-8 space-y-8">
-                    <div className="flex justify-between items-start">
-                        <span className="text-sm font-bold text-indigo-600 tracking-wider uppercase">
-                            Question {currentQuestionIndex + 1} of {MOCK_QUESTIONS.length}
-                        </span>
-                    </div>
-
                     <h2 className="text-2xl font-bold text-slate-900 leading-snug">
                         {currentQuestion.question}
                     </h2>
@@ -159,7 +216,7 @@ export function Quiz() {
                             let variantClass = "border-slate-200 hover:border-indigo-200 hover:bg-slate-50";
 
                             if (isAnswered) {
-                                if (isCorrect) variantClass = "border-green-500 bg-green-50 text-green-700";
+                                if (isCorrect) variantClass = "border-green-500 bg-green-50 text-green-700 font-medium";
                                 else if (isSelected) variantClass = "border-red-500 bg-red-50 text-red-700";
                                 else variantClass = "border-slate-200 opacity-50";
                             } else if (isSelected) {
@@ -176,7 +233,7 @@ export function Quiz() {
                                         variantClass
                                     )}
                                 >
-                                    <span className="font-medium text-lg">{option}</span>
+                                    <span className="text-lg">{option}</span>
                                     {isAnswered && isCorrect && <CheckCircle2 className="h-5 w-5 text-green-600" />}
                                     {isAnswered && isSelected && !isCorrect && <XCircle className="h-5 w-5 text-red-600" />}
                                 </button>
@@ -191,7 +248,7 @@ export function Quiz() {
                             </Button>
                         ) : (
                             <Button onClick={handleNext} size="lg" className="px-8 gap-2">
-                                {currentQuestionIndex < MOCK_QUESTIONS.length - 1 ? 'Next Question' : 'View Results'}
+                                {currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'View Results'}
                                 <ChevronRight className="h-4 w-4" />
                             </Button>
                         )}
