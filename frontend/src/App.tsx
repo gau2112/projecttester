@@ -9,7 +9,7 @@ import { Quiz } from './pages/Quiz';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/projecttester">
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
