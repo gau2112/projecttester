@@ -1,6 +1,7 @@
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { BookOpen, User, LogIn, Menu, X } from 'lucide-react';
+import { BookOpen, User, Menu, X } from 'lucide-react';
+
 import { useState } from 'react';
 import { Button } from './Button';
 

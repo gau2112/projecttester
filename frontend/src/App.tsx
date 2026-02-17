@@ -4,6 +4,9 @@ import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 
+import { Dashboard } from './pages/Dashboard';
+import { Quiz } from './pages/Quiz';
+
 function App() {
   return (
     <BrowserRouter>
@@ -12,11 +15,13 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          {/* Dashboard and Quiz routes will be added later */}
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/quiz/:subjectId" element={<Quiz />} />
         </Routes>
       </Layout>
     </BrowserRouter>
   );
 }
+
 
 export default App;
